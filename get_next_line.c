@@ -6,7 +6,7 @@
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:53:20 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/22 15:54:43 by drobert-         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:23:30 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,16 @@ int	read_buffer(t_buffer *buff, int fd)
 		return (-1);
 	amount_read = read(fd, read_buff, BUFFER_SIZE);
 	if (amount_read == 0)
+	{
+		free(read_buff);
 		return (0);
+	}
 	new_buff = malloc((amount_read + buff->size) * sizeof(char));
-	if (new_buff == 0)
-		return (-1);
+	if (new_buff == 0 || amount_read == 0)
+	{
+		free(read_buff);
+		return (0);
+	}
 	i = -1;
 	while (++i < buff->size && buff->buff)
 		*(new_buff + i) = *(buff->buff + i);
@@ -43,6 +49,7 @@ int	read_buffer(t_buffer *buff, int fd)
 	while (++i < amount_read)
 		*(new_buff + i + buff->size) = *(read_buff + i);
 	buff->size += amount_read;
+	free(read_buff);
 	free(buff->buff);
 	buff->buff = new_buff;
 	return (amount_read);
