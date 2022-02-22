@@ -6,7 +6,7 @@
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:53:20 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/22 16:23:30 by drobert-         ###   ########.fr       */
+/*   Updated: 2022/02/22 17:48:47 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ char	*get_line(t_buffer *buff, int fd)
 	int		i;
 	char	*str;
 	int		amount_read;
+	int	j = 0;
 
 	if (buff->buff == 0)
 		return (0);
@@ -102,12 +103,17 @@ char	*get_line(t_buffer *buff, int fd)
 		else
 			i++;
 	}
-	str = (char *)malloc((i + 2) * sizeof(*str));
+	if (*(buff->buff + i) == '\n')
+		i++;
+	str = (char *)malloc((i + 1) * sizeof(*str));
 	if (str == 0)
 		return (0);
-	*(str + ++i) = 0;
-	while (--i >= 0)
-		*(str + i) = *(buff->buff + i);
+	*(str + i) = 0;
+	while (j < i)
+	{
+		*(str + j) = *(buff->buff + j);
+		j++;
+	}
 	clear_line_buffer(buff);
 	return (str);
 }
@@ -126,10 +132,3 @@ char	*get_next_line(int fd)
 	}
 	return (get_line(&buff, fd));
 }
-/*
-int main()
-{
-	char *str = 0;
-	while ((str = get_next_line(0)))
-		printf("%s", str);
-}*/
