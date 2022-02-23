@@ -6,12 +6,13 @@
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:53:20 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/22 18:32:00 by drobert-         ###   ########.fr       */
+/*   Updated: 2022/02/23 17:03:06 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdio.h>
+#include <fcntl.h>
 
 void	clear_buff(t_buffer *buff)
 {
@@ -120,15 +121,15 @@ char	*get_line(t_buffer *buff, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_buffer	buff = {.size = 0, .buff = 0};
+	static	t_buffer	buff_arr[4096] = {{0}};
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
-	if (buff.buff == 0)
+	if (buff_arr[fd].buff == 0)
 	{
-		read_buffer(&buff, fd);
-		if (buff.buff == 0)
+		read_buffer(&buff_arr[fd], fd);
+		if (buff_arr[fd].buff == 0)
 			return (0);
 	}
-	return (get_line(&buff, fd));
+	return (get_line(&buff_arr[fd], fd));
 }
