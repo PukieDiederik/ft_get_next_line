@@ -1,44 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/23 14:35:13 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/23 16:42:40 by drobert-         ###   ########.fr       */
+/*   Created: 2022/02/23 18:01:22 by drobert-          #+#    #+#             */
+/*   Updated: 2022/02/23 18:21:44 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
-t_buffer	*get_buffer_from_fd(int fd, t_list **start)
+int	assign_read(int *amount_read, char **read_buff, int fd)
 {
-	t_list		*cur;
-	t_list		*new;
-	t_buffer	*new_buff;
-
-	cur = *start;
-	while (cur && cur->fd != fd)
-		cur = cur->next;
-	if (!cur)
+	*read_buff = malloc(BUFFER_SIZE * sizeof(char));
+	if (!*read_buff)
+		return (0);
+	*amount_read = read(fd, *read_buff, BUFFER_SIZE);
+	if (*amount_read == 0)
 	{
-		new = malloc(sizeof(t_list));
-		if (new == 0)
-			return (0);
-		new_buff = malloc(sizeof(t_buffer));
-		if (new_buff == 0)
-		{
-			free(new);
-			return (0);
-		}
-		new_buff->buff = 0;
-		new_buff->size = 0;
-		new->buff = new_buff;
-		new->fd = 0;
-		new->next = *start;
-		*start = new;
-		return (new->buff);
+		free(*read_buff);
+		return (0);
 	}
-	return (cur->buff);
+	return (*amount_read);
+}
+
+void	read_file(t_buffer **buff, int fd, int *i)
+{
+	int	amount_read;
+
+	amount_read = 1;
+	while (amount_read != 0)
+	{
+		if (++(*i) == (*buff)->size)
+			amount_read = read_buffer(*buff, fd);
+		if (*((*buff)->buff + (*i)) == '\n')
+			break ;
+	}
 }

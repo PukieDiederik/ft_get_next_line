@@ -6,7 +6,7 @@
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:53:20 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/22 18:32:00 by drobert-         ###   ########.fr       */
+/*   Updated: 2022/02/23 18:22:01 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,8 @@ int	read_buffer(t_buffer *buff, int fd)
 	int		amount_read;
 	int		i;
 
-	read_buff = malloc(BUFFER_SIZE * sizeof(char));
-	if (!read_buff)
-		return (-1);
-	amount_read = read(fd, read_buff, BUFFER_SIZE);
-	if (amount_read == 0)
-	{
-		free(read_buff);
+	if (!assign_read(&amount_read, &read_buff, fd))
 		return (0);
-	}
 	new_buff = malloc((amount_read + buff->size) * sizeof(char));
 	if (new_buff == 0 || amount_read == 0)
 	{
@@ -89,20 +82,13 @@ char	*get_line(t_buffer *buff, int fd)
 {
 	int		i;
 	char	*str;
-	int		amount_read;
-	int	j = 0;
+	int		j;
 
+	j = 0;
 	if (buff->buff == 0)
 		return (0);
 	i = -1;
-	amount_read = 1;
-	while (amount_read != 0)
-	{
-		if (++i == buff->size)
-			amount_read = read_buffer(buff, fd);
-		if (*(buff->buff + i) == '\n')
-			break ;
-	}
+	read_file(&buff, fd, &i);
 	if (i < buff->size && *(buff->buff + i) == '\n')
 		i++;
 	str = (char *)malloc((i + 1) * sizeof(*str));

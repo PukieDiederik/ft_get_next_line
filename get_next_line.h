@@ -6,7 +6,7 @@
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:50:18 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/22 15:56:28 by drobert-         ###   ########.fr       */
+/*   Updated: 2022/02/23 18:20:59 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,8 @@ typedef struct s_buff
 
 //functions
 char	*get_next_line(int fd);
+int		read_buffer(t_buffer *buff, int fd);
+int		assign_read(int *amount_read, char **read_buff, int fd);
+void	read_file(t_buffer **buff, int fd, int *i);
 
 #endif
