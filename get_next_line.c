@@ -30,7 +30,7 @@ int	read_buffer(t_buffer *buff, int fd)
 	if (!assign_read(&amount_read, &read_buff, fd))
 		return (0);
 	new_buff = malloc((amount_read + buff->size) * sizeof(char));
-	if (new_buff == 0 || amount_read == 0)
+	if (new_buff == 0 || amount_read <= 0)
 	{
 		free(read_buff);
 		return (0);

@@ -13,6 +13,7 @@
 #include "get_next_line_bonus.h"
 #include <stdio.h>
 #include <fcntl.h>
+#include <limits.h>
 
 void	clear_buff(t_buffer *buff)
 {
@@ -31,7 +32,7 @@ int	read_buffer(t_buffer *buff, int fd)
 	if (!assign_read(&amount_read, &read_buff, fd))
 		return (0);
 	new_buff = malloc((amount_read + buff->size) * sizeof(char));
-	if (new_buff == 0 || amount_read == 0)
+	if (new_buff == 0 || amount_read <= 0)
 	{
 		free(read_buff);
 		return (0);
@@ -107,9 +108,9 @@ char	*get_line(t_buffer *buff, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_buffer	buff_arr[4096] = {{0}};
+	static t_buffer	buff_arr[FOPEN_MAX] = {{0}};
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || fd >= FOPEN_MAX)
 		return (0);
 	if (buff_arr[fd].buff == 0)
 	{

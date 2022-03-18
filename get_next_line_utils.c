@@ -18,7 +18,7 @@ int	assign_read(int *amount_read, char **read_buff, int fd)
 	if (!*read_buff)
 		return (0);
 	*amount_read = read(fd, *read_buff, BUFFER_SIZE);
-	if (*amount_read == 0)
+	if (*amount_read <= 0)
 	{
 		free(*read_buff);
 		return (0);
@@ -35,7 +35,7 @@ void	read_file(t_buffer **buff, int fd, int *i)
 	{
 		if (++(*i) == (*buff)->size)
 			amount_read = read_buffer(*buff, fd);
-		if (*((*buff)->buff + (*i)) == '\n')
+		if (*i < (*buff)->size && *((*buff)->buff + (*i)) == '\n')
 			break ;
 	}
 }
