@@ -6,12 +6,15 @@
 /*   By: drobert- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:53:20 by drobert-          #+#    #+#             */
-/*   Updated: 2022/02/23 18:22:01 by drobert-         ###   ########.fr       */
+/*   Updated: 2022/03/22 10:28:29 by drobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+
+int		assign_read(int *amount_read, char **read_buff, int fd);
+void	read_file(t_buffer **buff, int fd, int *i);
 
 void	clear_buff(t_buffer *buff)
 {
